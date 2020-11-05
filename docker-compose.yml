@@ -1,0 +1,41 @@
+version: '3'
+services:
+
+  camunda:
+    image: camunda/camunda-bpm-platform:latest
+    networks:
+      - camundamesh
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
+
+  agent:
+    image: instana/agent:latest
+#    image: containers.instana.io/instana/release/agent/static:latest
+    pid: "host"
+    privileged: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /dev:/dev
+      - /sys:/sys
+      - /var/log:/var/log
+      - ./agent/configuration.yaml:/root/configuration.yaml
+    networks:
+      camundamesh:
+        aliases:
+          - instana-agent
+    environment:
+      - INSTANA_AGENT_ENDPOINT=${agent_endpoint}
+      - INSTANA_AGENT_ENDPOINT_PORT=${agent_endpoint_port:-443}
+      - INSTANA_AGENT_KEY=${agent_key}
+      - INSTANA_DOWNLOAD_KEY=${download_key}
+      - INSTANA_AGENT_ZONE=${agent_zone:-camunda-demo}
+      - INSTANA_LOG_LEVEL=DEBUG
+    expose:
+      - "42699"
+    ports:
+      - "42699:42699"
+
+networks:
+  camundamesh: {}
