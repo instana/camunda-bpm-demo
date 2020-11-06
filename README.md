@@ -35,6 +35,7 @@ agent_zone=<name of the zone for the agent; default: otel-demo>
 ## Launch
 
 ```sh
+docker login containers.instana.io -u _ -p $(cat .env | grep agent_key | sed s/^agent_key=//)
 docker-compose up
 ```
 

@@ -11,8 +11,8 @@ services:
       - "8080:8080"
 
   agent:
-    image: instana/agent:latest
-#    image: containers.instana.io/instana/release/agent/static:latest
+    # image: instana/agent:latest
+    image: containers.instana.io/instana/release/agent/static:latest
     pid: "host"
     privileged: true
     volumes:
