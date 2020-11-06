@@ -18,40 +18,23 @@ com.instana.plugin.javatrace:
           - name: camunda.job.id
             kind: argument
             index: 0
-      # Track Service Task completions
+      # Track Service Task creations
       - match:
           name: 'org.camunda.bpm.engine.TaskService'
           type: 'interface'
-          method: 'complete'
+          method: 'newTask'
         span:
-          name: Complete Task
-          type: EXIT
+          name: Create Task
+          type: INTERMEDIATE
           stackDepth: 20
-          tags:
-          - name: camunda.task.id
-            kind: argument
-            index: 0
-      # Track Service Task resolutions
-      - match:
-          name: 'org.camunda.bpm.engine.TaskService'
-          type: 'interface'
-          method: 'resolveTask'
-        span:
-          name: Resolve Task
-          type: EXIT
-          stackDepth: 20
-          tags:
-          - name: camunda.task.id
-            kind: argument
-            index: 0
-      # Track Service Task resolutions
+      # Track Service Task delegations
       - match:
           name: 'org.camunda.bpm.engine.TaskService'
           type: 'interface'
           method: 'delegateTask'
         span:
           name: Delegate Task
-          type: EXIT
+          type: INTERMEDIATE
           stackDepth: 20
           tags:
           - name: camunda.task.id
@@ -60,14 +43,27 @@ com.instana.plugin.javatrace:
           - name: camunda.task.delegate
             kind: argument
             index: 1
-      # Track Service Task creations
+      # Track Service Task resolutions
       - match:
           name: 'org.camunda.bpm.engine.TaskService'
           type: 'interface'
-          method: 'newTask'
+          method: 'resolveTask'
         span:
-          name: Create Task
-          type: EXIT
+          name: Resolve Task
+          type: INTERMEDIATE
+          stackDepth: 20
+          tags:
+          - name: camunda.task.id
+            kind: argument
+            index: 0
+      # Track Service Task completions
+      - match:
+          name: 'org.camunda.bpm.engine.TaskService'
+          type: 'interface'
+          method: 'complete'
+        span:
+          name: Complete Task
+          type: INTERMEDIATE
           stackDepth: 20
           tags:
           - name: camunda.task.id
@@ -80,46 +76,29 @@ com.instana.plugin.javatrace:
           method: 'deleteTask'
         span:
           name: Delete Task
-          type: EXIT
+          type: INTERMEDIATE
           stackDepth: 20
           tags:
           - name: camunda.task.id
             kind: argument
             index: 0
-      # Track External Service Task completions
+      # Track Service Task creations
       - match:
           name: 'org.camunda.bpm.engine.ExternalTaskService'
           type: 'interface'
-          method: 'complete'
+          method: 'newTask'
         span:
-          name: Complete External Task
-          type: EXIT
+          name: Create External Task
+          type: INTERMEDIATE
           stackDepth: 20
-          tags:
-          - name: camunda.task.id
-            kind: argument
-            index: 0
-      # Track Service Task resolutions
-      - match:
-          name: 'org.camunda.bpm.engine.ExternalTaskService'
-          type: 'interface'
-          method: 'resolveTask'
-        span:
-          name: Resolve External Task
-          type: EXIT
-          stackDepth: 20
-          tags:
-          - name: camunda.task.id
-            kind: argument
-            index: 0
-      # Track Service Task resolutions
+      # Track External Task delegations
       - match:
           name: 'org.camunda.bpm.engine.ExternalTaskService'
           type: 'interface'
           method: 'delegateTask'
         span:
           name: Delegate External Task
-          type: EXIT
+          type: INTERMEDIATE
           stackDepth: 20
           tags:
           - name: camunda.task.id
@@ -128,27 +107,40 @@ com.instana.plugin.javatrace:
           - name: camunda.task.delegate
             kind: argument
             index: 1
-      # Track Service Task creations
+      # Track External Task resolutions
       - match:
           name: 'org.camunda.bpm.engine.ExternalTaskService'
           type: 'interface'
-          method: 'newTask'
+          method: 'resolveTask'
         span:
-          name: Create External Task
-          type: EXIT
+          name: Resolve External Task
+          type: INTERMEDIATE
           stackDepth: 20
           tags:
           - name: camunda.task.id
             kind: argument
             index: 0
-      # Track Service Task deletions
+      # Track External Task completions
+      - match:
+          name: 'org.camunda.bpm.engine.ExternalTaskService'
+          type: 'interface'
+          method: 'complete'
+        span:
+          name: Complete External Task
+          type: INTERMEDIATE
+          stackDepth: 20
+          tags:
+          - name: camunda.task.id
+            kind: argument
+            index: 0
+      # Track External Task deletions
       - match:
           name: 'org.camunda.bpm.engine.ExternalTaskService'
           type: 'interface'
           method: 'deleteTask'
         span:
           name: Delete External Task
-          type: EXIT
+          type: INTERMEDIATE
           stackDepth: 20
           tags:
           - name: camunda.task.id
